@@ -400,13 +400,23 @@
 
 (defmacro subselect
   "Create a subselect clause to be used in queries. This works exactly like
-  (select ...) execept it will wrap the query in ( .. ) and make sure it can be
+  (select ...) except it will wrap the query in ( .. ) and make sure it can be
   used in any current query:
 
   (select users
     (where {:id [in (subselect users2 (fields :id))]}))"
   [& parts]
   `(utils/sub-query (query-only (select ~@parts))))
+
+(defmacro subquery
+  "Create a subquery clause to be used in queries. This works exactly like
+  (subselect ...) except that it will work with query types other than select:
+
+  (select (subquery union (queries (subselect users1 (where {:id [<= 10]}))
+                                   (subselect users2 (where {:id [> 10]}))))
+          (fields :id))"
+  [stmt & parts]
+  `(utils/sub-query (query-only (~stmt ~@parts))))
 
 (defn modifier
   "Add a modifer to the beginning of a query:
