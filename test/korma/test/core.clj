@@ -802,7 +802,7 @@
 ;;*****************************************************
 
 (deftest test-union
-  (is (= "dry run :: (SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?)) UNION (SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?)) :: [1 2 3]\n"
+  (is (= "dry run :: SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?) UNION SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?) :: [1 2 3]\n"
          (with-out-str (dry-run (union (queries (subselect users
                                                            (where {:a 1}))
                                                 (subselect state
@@ -810,7 +810,7 @@
                                                                    :c 3})))))))))
 
 (deftest test-union-all
-  (is (= "dry run :: (SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?)) UNION ALL (SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?)) :: [1 2 3]\n"
+  (is (= "dry run :: SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?) UNION ALL SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?) :: [1 2 3]\n"
          (with-out-str (dry-run (union-all (queries (subselect users
                                                                (where {:a 1}))
                                                     (subselect state
@@ -818,7 +818,7 @@
                                                                        :c 3})))))))))
 
 (deftest test-intersect
-  (is (= "dry run :: (SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?)) INTERSECT (SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?)) :: [1 2 3]\n"
+  (is (= "dry run :: SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?) INTERSECT SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?) :: [1 2 3]\n"
          (with-out-str (dry-run (intersect (queries (subselect users
                                                                (where {:a 1}))
                                                     (subselect state
@@ -826,7 +826,7 @@
                                                                        :c 3})))))))))
 
 (deftest test-order-by-in-union
-  (is (= "dry run :: (SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?)) UNION (SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?)) ORDER BY \"a\" ASC :: [1 2 3]\n"
+  (is (= "dry run :: SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?) UNION SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?) ORDER BY \"a\" ASC :: [1 2 3]\n"
          (with-out-str (dry-run (union (queries (subselect users
                                                            (where {:a 1}))
                                                 (subselect state
@@ -835,7 +835,7 @@
                                        (order :a)))))))
 
 (deftest test-order-by-in-union-all
-  (is (= "dry run :: (SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?)) UNION ALL (SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?)) ORDER BY \"a\" ASC :: [1 2 3]\n"
+  (is (= "dry run :: SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?) UNION ALL SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?) ORDER BY \"a\" ASC :: [1 2 3]\n"
          (with-out-str (dry-run (union-all (queries (subselect users
                                                                (where {:a 1}))
                                                     (subselect state
@@ -844,7 +844,7 @@
                                            (order :a)))))))
 
 (deftest test-order-by-in-intersect
-  (is (= "dry run :: (SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?)) INTERSECT (SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?)) ORDER BY \"a\" ASC :: [1 2 3]\n"
+  (is (= "dry run :: SELECT \"users\".* FROM \"users\" WHERE (\"users\".\"a\" = ?) INTERSECT SELECT \"state\".* FROM \"state\" WHERE (\"state\".\"b\" = ? AND \"state\".\"c\" = ?) ORDER BY \"a\" ASC :: [1 2 3]\n"
          (with-out-str (dry-run (intersect (queries (subselect users
                                                                (where {:a 1}))
                                                     (subselect state

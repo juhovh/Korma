@@ -369,8 +369,19 @@
 ;; Combination Queries
 ;;*****************************************************
 
+;; The usual map-val always wraps subqueries in parenthesis, but that is
+;; not allowed for combined queries in some databases, mainly SQLite.
+;; Therefore we use a lightweight version of map-val that does not do any
+;; wrapping and only handles subqueries.
+(defn- map-combination-val [v]
+  (if-let [sub (utils/sub-query? v)]
+    (do
+      (swap! *bound-params* utils/vconcat (:params sub))
+      (:sql-str sub))
+    (pred-map v)))
+
 (defn- sql-combination-query [type query]
-  (let [sub-query-sqls (map map-val (:queries query))
+  (let [sub-query-sqls (map map-combination-val (:queries query))
         neue-sql (string/join (str " " type " ") sub-query-sqls)]
     (assoc query :sql-str neue-sql)))
 
